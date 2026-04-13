@@ -1,22 +1,17 @@
 version: '3.9'
-
 services:
   postgres:
     image: postgres:17-alpine
     container_name: franchise_postgres
-    restart: always
-
     environment:
       POSTGRES_DB: franchise_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
     ports:
       - "5432:5432"
-
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d franchise_db"]
@@ -25,7 +20,7 @@ services:
       retries: 5
 
   app:
-    build: ..
+    build: .
     container_name: franchise_api
 
     depends_on:
