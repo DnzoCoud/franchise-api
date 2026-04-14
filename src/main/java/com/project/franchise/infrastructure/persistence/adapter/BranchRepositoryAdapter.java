@@ -21,14 +21,19 @@ public class BranchRepositoryAdapter implements BranchRepository {
 
     @Override
     public Branch save(Branch branch) {
-        BranchEntity entity = new BranchEntity();
-        entity.setId(branch.getId());
-        entity.setName(branch.getName());
+        BranchEntity entity;
 
+        if (branch.getId() != null) {
+            entity = repo.findById(branch.getId())
+                    .orElseThrow(() -> new RuntimeException("Franchise not found"));
+        }else {
+            entity = new BranchEntity();
+        }
         FranchiseEntity franchise = new FranchiseEntity();
         franchise.setId(branch.getFranchiseId());
-        entity.setFranchise(franchise);
 
+        entity.setName(branch.getName());
+        entity.setFranchise(franchise);
         BranchEntity saved = repo.save(entity);
 
         return new Branch(
@@ -64,5 +69,15 @@ public class BranchRepositoryAdapter implements BranchRepository {
                     e.getName()
             ))
             .toList();
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return repo.existsByName(name);
+    }
+
+    @Override
+    public boolean existsByNameAndIdNot(Long id, String name) {
+        return repo.existsByNameAndIdNot(name, id);
     }
 }

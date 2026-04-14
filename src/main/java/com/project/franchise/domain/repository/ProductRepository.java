@@ -11,4 +11,5 @@ public interface ProductRepository {
     Optional<Product> findById(Long id);
     List<Product> findByBranchId(Long branchId);
     List<Product> findTopByFranchise(Long franchiseId);
+    List<Product> findAll();
 }

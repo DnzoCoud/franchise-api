@@ -77,4 +77,9 @@ public class BeanConfiguration {
     public GetTopStockProductsUseCase topStockUseCase(ProductRepository repo) {
         return new GetTopStockProductsUseCase(repo);
     }
+
+    @Bean
+    public ListAllProductsUseCase listAllProductsUseCase(ProductRepository repo) {
+        return new ListAllProductsUseCase(repo);
+    }
 }
