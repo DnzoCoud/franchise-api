@@ -1,6 +1,6 @@
 package com.project.franchise.application.usecase.franchise;
 
-import com.project.franchise.application.dto.request.CreateFranchiseRequest;
+import com.project.franchise.application.dto.request.franchise.CreateFranchiseRequest;
 import com.project.franchise.application.dto.response.FranchiseResponse;
 import com.project.franchise.domain.exception.DomainException;
 import com.project.franchise.domain.model.Franchise;
