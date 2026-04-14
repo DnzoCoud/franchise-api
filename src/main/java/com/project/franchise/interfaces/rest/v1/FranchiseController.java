@@ -9,7 +9,9 @@ import com.project.franchise.application.usecase.franchise.UpdateFranchiseUseCas
 import com.project.franchise.domain.model.Franchise;
 import com.project.franchise.interfaces.handler.ApiResponse;
 import com.project.franchise.interfaces.handler.ApiRoutes;
-import jakarta.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,12 +42,28 @@ public class FranchiseController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.ok(response));
     }
 
+    @Operation(summary = "Create a new franchise")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Franchise created"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid input"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Franchise already exists")
+    })
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> create(@RequestBody CreateFranchiseRequest request) {
+    public ResponseEntity<ApiResponse<?>> create(@RequestBody @Valid CreateFranchiseRequest request) {
         var response = this.createFranchiseUseCase.execute(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(response));
     }
 
+    @Operation(
+            summary = "Update franchise name",
+            description = "Updates the name of an existing franchise"
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Franchise updated successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Franchise not found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Franchise name already exists")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> update(@PathVariable Long id, @RequestBody UpdateFranchiseRequest request) {
         var response = this.updateFranchiseUseCase.execute(id, request);
