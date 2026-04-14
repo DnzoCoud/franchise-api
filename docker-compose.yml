@@ -3,9 +3,10 @@ services:
     image: postgres:17-alpine
     container_name: franchise_postgres
     environment:
-      POSTGRES_DB: franchise_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
     ports:
       - "5432:5432"
     volumes:
@@ -13,7 +14,7 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d franchise_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -27,10 +28,11 @@ services:
         condition: service_healthy
 
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/franchise_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_PROFILES_ACTIVE: dev
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
 
     ports:
       - "8080:8080"
