@@ -2,6 +2,7 @@ package com.project.franchise.application.usecase.franchise;
 
 import com.project.franchise.application.dto.request.franchise.UpdateFranchiseRequest;
 import com.project.franchise.application.dto.response.FranchiseResponse;
+import com.project.franchise.domain.exception.DuplicateException;
 import com.project.franchise.domain.exception.NotFoundException;
 import com.project.franchise.domain.model.Franchise;
 import com.project.franchise.domain.repository.FranchiseRepository;
@@ -13,9 +14,13 @@ public class UpdateFranchiseUseCase {
         this.franchiseRepository = franchiseRepository;
     }
 
-    public FranchiseResponse updateFranchise(Long id, UpdateFranchiseRequest request) {
+    public FranchiseResponse execute(Long id, UpdateFranchiseRequest request) {
         Franchise franchise = franchiseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Franchise not found"));
+
+        if (franchiseRepository.existsByNameAndIdNot(id, request.name())) {
+            throw new DuplicateException("Franchise already exists");
+        }
 
         franchise.updateName(request.name());
         var response = franchiseRepository.save(franchise);

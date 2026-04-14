@@ -2,10 +2,7 @@ package com.project.franchise.domain.repository;
 
 import com.project.franchise.domain.model.Franchise;
 
-import java.util.Optional;
-
-public interface FranchiseRepository {
-    Franchise save(Franchise franchise);
-    Optional<Franchise> findById(Long id);
+public interface FranchiseRepository extends BaseRepository<Franchise> {
     boolean existsByName(String name);
+    boolean existsByNameAndIdNot(Long id, String name);
 }

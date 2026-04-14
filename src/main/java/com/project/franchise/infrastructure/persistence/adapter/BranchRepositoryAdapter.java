@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class BranchRepositoryAdapter implements BranchRepository {
@@ -35,6 +36,12 @@ public class BranchRepositoryAdapter implements BranchRepository {
                 saved.getFranchise().getId(),
                 saved.getName()
         );
+    }
+
+    @Override
+    public List<Branch> findAll() {
+        var entities = this.repo.findAll();
+        return entities.stream().map(e -> new Branch(e.getId(), e.getFranchise().getId(), e.getName())).collect(Collectors.toList());
     }
 
     @Override

@@ -6,7 +6,9 @@ import com.project.franchise.infrastructure.persistence.entity.FranchiseEntity;
 import com.project.franchise.infrastructure.persistence.repository.JpaFranchiseRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class FranchiseRepositoryAdapter implements FranchiseRepository {
@@ -18,13 +20,26 @@ public class FranchiseRepositoryAdapter implements FranchiseRepository {
 
     @Override
     public Franchise save(Franchise franchise) {
-        FranchiseEntity entity = new FranchiseEntity();
-        entity.setId(franchise.getId());
+
+        FranchiseEntity entity;
+
+        if (franchise.getId() != null) {
+            entity = repo.findById(franchise.getId())
+                    .orElseThrow(() -> new RuntimeException("Franchise not found"));
+        } else {
+            entity = new FranchiseEntity();
+        }
         entity.setName(franchise.getName());
 
         FranchiseEntity saved = repo.save(entity);
 
         return new Franchise(saved.getId(), franchise.getName());
+    }
+
+    @Override
+    public List<Franchise> findAll() {
+        var entities = repo.findAll();
+        return entities.stream().map(entity -> new Franchise(entity.getId(), entity.getName())).collect(Collectors.toList());
     }
 
     @Override
@@ -36,5 +51,10 @@ public class FranchiseRepositoryAdapter implements FranchiseRepository {
     @Override
     public boolean existsByName(String name) {
         return repo.existsByName(name);
+    }
+
+    @Override
+    public boolean existsByNameAndIdNot(Long id, String name) {
+        return repo.existsByNameAndIdNot(name, id);
     }
 }
