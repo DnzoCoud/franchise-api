@@ -20,15 +20,20 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Product save(Product product) {
-        ProductEntity entity = new ProductEntity();
-        entity.setId(product.getId());
-        entity.setName(product.getName());
-        entity.setStock(product.getStock());
+        ProductEntity entity;
 
+        if (product.getId() != null) {
+            entity = repo.findById(product.getId())
+                    .orElseThrow(() -> new RuntimeException("Franchise not found"));
+        }else {
+            entity = new ProductEntity();
+        }
         BranchEntity branch = new BranchEntity();
         branch.setId(product.getBranchId());
-        entity.setBranch(branch);
 
+        entity.setBranch(branch);
+        entity.setName(product.getName());
+        entity.setStock(product.getStock());
         ProductEntity saved = repo.save(entity);
 
         return new Product(
@@ -77,6 +82,19 @@ public class ProductRepositoryAdapter implements ProductRepository {
                 e.getBranch().getId(),
                 e.getName(),
                 e.getStock()
+            ))
+            .toList();
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return repo.findAll()
+            .stream()
+            .map(e -> new Product(
+                    e.getId(),
+                    e.getBranch().getId(),
+                    e.getName(),
+                    e.getStock()
             ))
             .toList();
     }

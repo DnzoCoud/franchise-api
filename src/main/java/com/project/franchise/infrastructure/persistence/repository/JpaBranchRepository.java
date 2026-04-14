@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface JpaBranchRepository extends JpaRepository<BranchEntity, Long> {
     List<BranchEntity> findByFranchiseId(Long franchiseId);
+    boolean existsByName(String name);
+
+    boolean existsByNameAndIdNot(String name, Long id);
 }
