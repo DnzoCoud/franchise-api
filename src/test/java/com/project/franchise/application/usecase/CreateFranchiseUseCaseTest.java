@@ -1,6 +1,6 @@
 package com.project.franchise.application.usecase;
 
-import com.project.franchise.application.dto.request.CreateFranchiseRequest;
+import com.project.franchise.application.dto.request.franchise.CreateFranchiseRequest;
 import com.project.franchise.application.usecase.franchise.CreateFranchiseUseCase;
 import com.project.franchise.domain.model.Franchise;
 import com.project.franchise.domain.repository.FranchiseRepository;
