@@ -13,7 +13,7 @@ public class UpdateBranchUseCase {
         this.branchRepository = branchRepository;
     }
 
-    public BranchResponse updateBranch(Long id, UpdateBranchRequest request) {
+    public BranchResponse execute(Long id, UpdateBranchRequest request) {
         Branch branch = branchRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Branch not found"));
 

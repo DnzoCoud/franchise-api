@@ -1,6 +1,7 @@
 package com.project.franchise.infrastructure.config;
 
 import com.project.franchise.application.usecase.branch.CreateBranchUseCase;
+import com.project.franchise.application.usecase.branch.ListAllBranchesUseCase;
 import com.project.franchise.application.usecase.branch.UpdateBranchUseCase;
 import com.project.franchise.application.usecase.franchise.CreateFranchiseUseCase;
 import com.project.franchise.application.usecase.franchise.ListAllFranchisesUseCase;
@@ -42,6 +43,11 @@ public class BeanConfiguration {
     @Bean
     public UpdateBranchUseCase updateBranchUseCase(BranchRepository repo) {
         return new UpdateBranchUseCase(repo);
+    }
+
+    @Bean
+    public ListAllBranchesUseCase listAllBranchesUseCase(BranchRepository repo) {
+        return new ListAllBranchesUseCase(repo);
     }
 
     @Bean
