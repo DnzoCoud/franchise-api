@@ -16,21 +16,18 @@ public class ApiResponse<T> {
 
     @Builder.Default
     private final Instant timestamp = Instant.now();
-    private final String path;
 
-    public static <T> ApiResponse<T> ok(T data, String path) {
+    public static <T> ApiResponse<T> ok(T data) {
         return ApiResponse.<T>builder()
                 .success(true)
                 .data(data)
-                .path(path)
                 .build();
     }
 
-    public static <T> ApiResponse<T> error(ApiError error, String path) {
+    public static <T> ApiResponse<T> error(ApiError error) {
         return ApiResponse.<T>builder()
                 .success(false)
                 .error(error)
-                .path(path)
                 .build();
     }
 }

@@ -5,8 +5,6 @@ import com.project.franchise.domain.model.Branch;
 import java.util.List;
 import java.util.Optional;
 
-public interface BranchRepository {
-    Branch save(Branch branch);
-    Optional<Branch> findById(Long id);
+public interface BranchRepository extends BaseRepository<Branch> {
     List<Branch> findByFranchiseId(Long franchiseId);
 }
